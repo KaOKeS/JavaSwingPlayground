@@ -19,11 +19,16 @@ public class MainFrame extends JFrame {
         setSize(500, 500);
         setLayout(new BorderLayout());
 
-        add(toolbar,BorderLayout.NORTH);
-        add(textPanel,BorderLayout.CENTER);
-        add(formPanel,BorderLayout.WEST);
+        add(toolbar, BorderLayout.NORTH);
+        add(textPanel, BorderLayout.CENTER);
+        add(formPanel, BorderLayout.WEST);
 
         toolbar.setTextListener(textPanel::appendText);
+        formPanel.setFormListener(e -> {
+            String name = e.getName();
+            String occupation = e.getOccupation();
+            textPanel.appendText("Name: " + name + " Occupation: " + occupation + "\n");
+        });
 
         setVisible(true);
     }

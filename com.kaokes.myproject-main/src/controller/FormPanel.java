@@ -1,5 +1,7 @@
 package controller;
 
+import lombok.Setter;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -11,17 +13,26 @@ public class FormPanel extends JPanel {
     private final JTextField nameField;
     private final JTextField occupationField;
     private final JButton submitBtn;
+    @Setter
+    private transient FormListener formListener;
+
     public FormPanel() {
-        setPreferredSize(new Dimension(250,1));
+        setPreferredSize(new Dimension(250, 1));
         TitledBorder innerBorder = BorderFactory.createTitledBorder("Add Person");
         Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        setBorder(BorderFactory.createCompoundBorder(outerBorder,innerBorder));
+        setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
         nameLabel = new JLabel("Name: ");
         occupationLabel = new JLabel("Occupation: ");
         nameField = new JTextField(10);
         occupationField = new JTextField(10);
         submitBtn = new JButton("Submit");
+        submitBtn.addActionListener(e -> {
+            FormEvent formEvent = new FormEvent(this, nameField.getText(), occupationField.getText());
+            if (formListener != null) {
+                formListener.formEventOccurred(formEvent);
+            }
+        });
 
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -38,12 +49,12 @@ public class FormPanel extends JPanel {
 
         gc.anchor = GridBagConstraints.LINE_END;
         gc.insets = rightInset;
-        add(nameLabel,gc);
+        add(nameLabel, gc);
 
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.LINE_START;
         gc.insets = zeroInset;
-        add(nameField,gc);
+        add(nameField, gc);
 
         /////// Row 2 ////////////
         gc.gridy = 1;
@@ -51,12 +62,12 @@ public class FormPanel extends JPanel {
         gc.gridx = 0;
         gc.insets = rightInset;
         gc.anchor = GridBagConstraints.LINE_END;
-        add(occupationLabel,gc);
+        add(occupationLabel, gc);
 
         gc.gridx = 1;
         gc.insets = zeroInset;
         gc.anchor = GridBagConstraints.LINE_START;
-        add(occupationField,gc);
+        add(occupationField, gc);
 
         /////// Row 3 ////////////
         gc.gridy = 2;
@@ -64,6 +75,6 @@ public class FormPanel extends JPanel {
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.weighty = 5;
-        add(submitBtn,gc);
+        add(submitBtn, gc);
     }
 }
