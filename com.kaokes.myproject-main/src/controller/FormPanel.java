@@ -1,6 +1,7 @@
 package controller;
 
 import lombok.Setter;
+import model.AgeCategory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -13,6 +14,8 @@ public class FormPanel extends JPanel {
     private final JTextField nameField;
     private final JTextField occupationField;
     private final JButton submitBtn;
+    private final JList<AgeCategory> ageList;
+
     @Setter
     private transient FormListener formListener;
 
@@ -26,13 +29,25 @@ public class FormPanel extends JPanel {
         occupationLabel = new JLabel("Occupation: ");
         nameField = new JTextField(10);
         occupationField = new JTextField(10);
+        ageList = new JList<>();
+        DefaultListModel<AgeCategory> ageModel = new DefaultListModel<>();
+        ageModel.addElement(AgeCategory.UNDER18);
+        ageModel.addElement(AgeCategory.FR18TO65);
+        ageModel.addElement(AgeCategory.OVER65);
+
+        ageList.setModel(ageModel);
+        ageList.setSelectedIndex(1);
+        ageList.setPreferredSize(new Dimension(105, 60));
+        ageList.setBorder(BorderFactory.createEtchedBorder());
+
         submitBtn = new JButton("Submit");
         submitBtn.addActionListener(e -> {
-            FormEvent formEvent = new FormEvent(this, nameField.getText(), occupationField.getText());
+            FormEvent formEvent = new FormEvent(this, nameField.getText(), occupationField.getText(), ageList.getSelectedValue());
             if (formListener != null) {
                 formListener.formEventOccurred(formEvent);
             }
         });
+
 
         setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
@@ -71,6 +86,10 @@ public class FormPanel extends JPanel {
 
         /////// Row 3 ////////////
         gc.gridy = 2;
+        add(ageList, gc);
+
+        /////// Row 4 ////////////
+        gc.gridy = 3;
 
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;

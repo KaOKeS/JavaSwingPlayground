@@ -1,5 +1,7 @@
 package controller;
 
+import model.AgeCategory;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,6 +17,7 @@ public class MainFrame extends JFrame {
         toolbar = new Toolbar();
         formPanel = new FormPanel();
 
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLayout(new BorderLayout());
@@ -27,7 +30,9 @@ public class MainFrame extends JFrame {
         formPanel.setFormListener(e -> {
             String name = e.getName();
             String occupation = e.getOccupation();
-            textPanel.appendText("Name: " + name + " Occupation: " + occupation + "\n");
+            AgeCategory ageCat = e.getAgeCategory();
+
+            textPanel.appendText(name + ": " + occupation + ": " + ageCat.ordinal() + "\n");
         });
 
         setVisible(true);
