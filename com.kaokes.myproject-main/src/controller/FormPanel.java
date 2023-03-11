@@ -16,6 +16,12 @@ public class FormPanel extends JPanel {
     private final JButton submitBtn;
     private final JList<AgeCategory> ageList;
     private final JComboBox<String> empCombo;
+    private final JCheckBox citizenCheck;
+    private final JTextField taxField;
+    private final JLabel taxLabel;
+    private final JRadioButton maleRadio;
+    private final JRadioButton femaleRadio;
+    private final ButtonGroup genderGroup;
 
     @Setter
     private transient FormListener formListener;
@@ -31,6 +37,27 @@ public class FormPanel extends JPanel {
         nameField = new JTextField(10);
         occupationField = new JTextField(10);
         ageList = new JList<>();
+        citizenCheck = new JCheckBox();
+        taxField = new JTextField(10);
+        taxLabel = new JLabel("Tax ID: ");
+        maleRadio = new JRadioButton("Male");
+        femaleRadio = new JRadioButton("Female");
+        genderGroup = new ButtonGroup();
+        maleRadio.setSelected(true);
+        maleRadio.setActionCommand("male");
+        femaleRadio.setActionCommand("female");
+
+        genderGroup.add(maleRadio);
+        genderGroup.add(femaleRadio);
+
+        taxField.setEnabled(false);
+        taxLabel.setEnabled(false);
+        citizenCheck.addActionListener(e -> {
+            boolean isChecked = citizenCheck.isSelected();
+            taxField.setEnabled(isChecked);
+            taxLabel.setEnabled(isChecked);
+        });
+
         DefaultListModel<AgeCategory> ageModel = new DefaultListModel<>();
         ageModel.addElement(AgeCategory.UNDER18);
         ageModel.addElement(AgeCategory.FR18TO65);
@@ -50,7 +77,16 @@ public class FormPanel extends JPanel {
 
         submitBtn = new JButton("Submit");
         submitBtn.addActionListener(e -> {
-            FormEvent formEvent = new FormEvent(this, nameField.getText(), occupationField.getText(), ageList.getSelectedValue(), (String) empCombo.getSelectedItem());
+            String gender = genderGroup.getSelection().getActionCommand();
+
+            FormEvent formEvent = new FormEvent(this,
+                    nameField.getText(),
+                    occupationField.getText(),
+                    ageList.getSelectedValue(),
+                    (String) empCombo.getSelectedItem(),
+                    taxField.getText(),
+                    citizenCheck.isSelected(),
+                    gender);
             if (formListener != null) {
                 formListener.formEventOccurred(formEvent);
             }
@@ -124,8 +160,57 @@ public class FormPanel extends JPanel {
         /////// Next row ////////////
         gc.gridy++;
 
-        gc.gridx = 1;
+        gc.gridx = 0;
+        gc.insets = rightInset;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
+        add(new JLabel("US Citizen: "), gc);
+
+        gc.gridx = 1;
+        gc.insets = zeroInset;
+        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        add(citizenCheck, gc);
+
+        /////// Next row ////////////
+        gc.gridy++;
+
+        gc.gridx = 0;
+        gc.insets = rightInset;
+        gc.anchor = GridBagConstraints.FIRST_LINE_END;
+        add(taxLabel, gc);
+
+        gc.gridx = 1;
+        gc.insets = zeroInset;
+        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        add(taxField, gc);
+
+        /////// Next row ////////////
+        gc.gridy++;
+        gc.weighty = 0.05;
+
+        gc.gridx = 0;
+        gc.insets = rightInset;
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(new JLabel("Gender: "), gc);
+
+        gc.gridx = 1;
+        gc.insets = zeroInset;
+        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        add(maleRadio, gc);
+
+        /////// Next row ////////////
+        gc.gridy++;
+
+        gc.gridx = 1;
+        gc.weighty = 0.2;
+        gc.insets = zeroInset;
+        gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        add(femaleRadio, gc);
+
+        /////// Next row ////////////
+        gc.gridy++;
+
+        gc.gridx = 1;
+        gc.anchor = GridBagConstraints.CENTER;
         gc.weighty = 5;
         add(submitBtn, gc);
     }
