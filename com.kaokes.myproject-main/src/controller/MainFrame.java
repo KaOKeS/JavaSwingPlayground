@@ -12,17 +12,23 @@ public class MainFrame extends JFrame {
     private final TextPanel textPanel;
     private final Toolbar toolbar;
     private final FormPanel formPanel;
+    private final JFileChooser fileChooser;
 
     public MainFrame(String title) {
         super(title);
         textPanel = new TextPanel();
         toolbar = new Toolbar();
         formPanel = new FormPanel();
+
+        fileChooser = new JFileChooser();
+        fileChooser.addChoosableFileFilter(new PersonFileFilter());
+
         setJMenuBar(createMenuBar());
 
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 500);
+        setMinimumSize(new Dimension(500, 500));
         setLayout(new BorderLayout());
 
         add(toolbar, BorderLayout.NORTH);
@@ -71,8 +77,25 @@ public class MainFrame extends JFrame {
 
         fileMenu.setMnemonic(KeyEvent.VK_F);
         exitItem.setMnemonic(KeyEvent.VK_X);
-        exitItem.addActionListener(e -> System.exit(0));
+        exitItem.addActionListener(e -> {
+            int action = JOptionPane.showConfirmDialog(MainFrame.this, "Do you really want to exit application?", "Confirm Exit", JOptionPane.OK_CANCEL_OPTION);
+            if (action == JOptionPane.OK_OPTION) {
+                System.exit(0);
+            }
+        });
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+
+        importDataItem.addActionListener(e -> {
+            if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+
+            }
+        });
+
+        exportDataItem.addActionListener(e -> {
+            if(fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+
+            }
+        });
 
         return menuBar;
     }
