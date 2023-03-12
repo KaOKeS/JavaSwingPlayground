@@ -3,9 +3,15 @@ package model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class Person {
+public class Person implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3346996092642584991L;
     private static Long count = 1L;
 
     private Long id;
