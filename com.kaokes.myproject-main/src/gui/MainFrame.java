@@ -1,4 +1,4 @@
-package controller;
+package gui;
 
 import model.AgeCategory;
 
@@ -86,13 +86,13 @@ public class MainFrame extends JFrame {
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
 
         importDataItem.addActionListener(e -> {
-            if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+            if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 
             }
         });
 
         exportDataItem.addActionListener(e -> {
-            if(fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+            if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 
             }
         });

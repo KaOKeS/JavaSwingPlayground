@@ -1,17 +1,17 @@
 package model;
 
 public enum AgeCategory {
-    UNDER18 {
+    CHILD {
         @Override
         public String toString() {
             return "under 18";
         }
-    }, FR18TO65 {
+    }, ADULT {
         @Override
         public String toString() {
             return "18 to 65";
         }
-    }, OVER65 {
+    }, SENIOR {
         @Override
         public String toString() {
             return "over 65";

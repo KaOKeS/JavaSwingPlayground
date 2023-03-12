@@ -1,4 +1,4 @@
-import controller.MainFrame;
+import gui.MainFrame;
 
 import javax.swing.*;
 

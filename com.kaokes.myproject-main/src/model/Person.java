@@ -1,24 +1,24 @@
-package controller;
+package model;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.AgeCategory;
-
-import java.util.EventObject;
 
 @Getter
 @Setter
-public class FormEvent extends EventObject {
+public class Person {
+    private static Long count = 1L;
+
+    private Long id;
     private String name;
     private String occupation;
     private AgeCategory ageCategory;
-    private String empCat;
+    private EmploymentCategory empCat;
     private String taxId;
     private boolean usCitizen;
-    private String gender;
+    private Gender gender;
 
-    public FormEvent(Object source, String name, String occupation, AgeCategory ageCategory, String empCat, String taxId, boolean usCitizen, String gender) {
-        super(source);
+    public Person(String name, String occupation, AgeCategory ageCategory, EmploymentCategory empCat, String taxId, boolean usCitizen, Gender gender) {
+        this.id = count++;
         this.name = name;
         this.occupation = occupation;
         this.ageCategory = ageCategory;

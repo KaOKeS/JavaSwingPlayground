@@ -14,9 +14,5 @@ e
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-V
-&com.kaokes.myproject-main/src/App.java,3\b\3b19179ed5569294009b3caded3a89447ec6cbb7
 j
 :com.kaokes.myproject-main/src/controller/FormListener.java,3\2\32d6c39cc5915be7235c7f37c725ea82f2c64643
-d
-4com.kaokes.myproject-main/src/model/AgeCategory.java,7\2\7237f09e22d76d09f491e0c8a20c4b15a9fa31a9

@@ -1,4 +1,4 @@
-package controller;
+package gui;
 
 import lombok.Setter;
 import model.AgeCategory;
@@ -60,9 +60,9 @@ public class FormPanel extends JPanel {
         });
 
         DefaultListModel<AgeCategory> ageModel = new DefaultListModel<>();
-        ageModel.addElement(AgeCategory.UNDER18);
-        ageModel.addElement(AgeCategory.FR18TO65);
-        ageModel.addElement(AgeCategory.OVER65);
+        ageModel.addElement(AgeCategory.CHILD);
+        ageModel.addElement(AgeCategory.ADULT);
+        ageModel.addElement(AgeCategory.SENIOR);
 
         ageList.setModel(ageModel);
         ageList.setSelectedIndex(1);
