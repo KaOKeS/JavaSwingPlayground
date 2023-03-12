@@ -16,5 +16,19 @@ public enum AgeCategory {
         public String toString() {
             return "over 65";
         }
+    };
+
+    public static AgeCategory getAgeCategoryById(int id) {
+        switch (id) {
+            case 0 -> {
+                return AgeCategory.CHILD;
+            }
+            case 2 -> {
+                return AgeCategory.SENIOR;
+            }
+            default -> {
+                return AgeCategory.ADULT;
+            }
+        }
     }
 }

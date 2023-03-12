@@ -2,7 +2,6 @@ package gui;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.AgeCategory;
 
 import java.util.EventObject;
 
@@ -11,13 +10,13 @@ import java.util.EventObject;
 public class FormEvent extends EventObject {
     private String name;
     private String occupation;
-    private AgeCategory ageCategory;
+    private int ageCategory;
     private String empCat;
     private String taxId;
     private boolean usCitizen;
     private String gender;
 
-    public FormEvent(Object source, String name, String occupation, AgeCategory ageCategory, String empCat, String taxId, boolean usCitizen, String gender) {
+    public FormEvent(Object source, String name, String occupation, int ageCategory, String empCat, String taxId, boolean usCitizen, String gender) {
         super(source);
         this.name = name;
         this.occupation = occupation;

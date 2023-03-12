@@ -83,7 +83,7 @@ public class FormPanel extends JPanel {
             FormEvent formEvent = new FormEvent(this,
                     nameField.getText(),
                     occupationField.getText(),
-                    ageList.getSelectedValue(),
+                    ageList.getSelectedValue().ordinal(),
                     (String) empCombo.getSelectedItem(),
                     taxField.getText(),
                     citizenCheck.isSelected(),

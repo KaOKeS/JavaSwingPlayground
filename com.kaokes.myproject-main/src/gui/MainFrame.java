@@ -1,6 +1,6 @@
 package gui;
 
-import model.AgeCategory;
+import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +13,14 @@ public class MainFrame extends JFrame {
     private final Toolbar toolbar;
     private final FormPanel formPanel;
     private final JFileChooser fileChooser;
+    private final transient Controller controller;
 
     public MainFrame(String title) {
         super(title);
         textPanel = new TextPanel();
         toolbar = new Toolbar();
         formPanel = new FormPanel();
+        controller = new Controller();
 
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new PersonFileFilter());
@@ -36,14 +38,7 @@ public class MainFrame extends JFrame {
         add(formPanel, BorderLayout.WEST);
 
         toolbar.setTextListener(textPanel::appendText);
-        formPanel.setFormListener(e -> {
-            String name = e.getName();
-            String occupation = e.getOccupation();
-            AgeCategory ageCat = e.getAgeCategory();
-            String empCat = e.getEmpCat();
-
-            textPanel.appendText(name + ": " + occupation + ": " + ageCat.ordinal() + ": " + empCat + "\n");
-        });
+        formPanel.setFormListener(controller::addPerson);
 
         setVisible(true);
     }
