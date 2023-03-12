@@ -1,7 +1,6 @@
 package gui;
 
 import lombok.Setter;
-import model.AgeCategory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +14,7 @@ public class FormPanel extends JPanel {
     private final JTextField nameField;
     private final JTextField occupationField;
     private final JButton okBtn;
-    private final JList<AgeCategory> ageList;
+    private final JList<String> ageList;
     private final JComboBox<String> empCombo;
     private final JCheckBox citizenCheck;
     private final JTextField taxField;
@@ -59,10 +58,10 @@ public class FormPanel extends JPanel {
             taxLabel.setEnabled(isChecked);
         });
 
-        DefaultListModel<AgeCategory> ageModel = new DefaultListModel<>();
-        ageModel.addElement(AgeCategory.CHILD);
-        ageModel.addElement(AgeCategory.ADULT);
-        ageModel.addElement(AgeCategory.SENIOR);
+        DefaultListModel<String> ageModel = new DefaultListModel<>();
+        ageModel.addElement("before 18");
+        ageModel.addElement("18 to 65");
+        ageModel.addElement("over 65");
 
         ageList.setModel(ageModel);
         ageList.setSelectedIndex(1);
@@ -83,7 +82,7 @@ public class FormPanel extends JPanel {
             FormEvent formEvent = new FormEvent(this,
                     nameField.getText(),
                     occupationField.getText(),
-                    ageList.getSelectedValue().ordinal(),
+                    ageList.getSelectedIndex(),
                     (String) empCombo.getSelectedItem(),
                     taxField.getText(),
                     citizenCheck.isSelected(),

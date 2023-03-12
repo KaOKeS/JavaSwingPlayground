@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
     private final FormPanel formPanel;
     private final JFileChooser fileChooser;
     private final transient Controller controller;
+    private final TablePanel tablePanel;
 
     public MainFrame(String title) {
         super(title);
@@ -21,6 +22,8 @@ public class MainFrame extends JFrame {
         toolbar = new Toolbar();
         formPanel = new FormPanel();
         controller = new Controller();
+        tablePanel = new TablePanel();
+        tablePanel.setData(controller.getPeople());
 
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new PersonFileFilter());
@@ -34,11 +37,14 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
 
         add(toolbar, BorderLayout.NORTH);
-        add(textPanel, BorderLayout.CENTER);
+        add(tablePanel, BorderLayout.CENTER);
         add(formPanel, BorderLayout.WEST);
 
         toolbar.setTextListener(textPanel::appendText);
-        formPanel.setFormListener(controller::addPerson);
+        formPanel.setFormListener(e -> {
+            controller.addPerson(e);
+            tablePanel.refresh();
+        });
 
         setVisible(true);
     }

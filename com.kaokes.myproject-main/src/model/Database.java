@@ -11,6 +11,6 @@ public class Database {
     }
 
     public List<Person> getPeople() {
-        return List.copyOf(people);
+        return people;
     }
 }

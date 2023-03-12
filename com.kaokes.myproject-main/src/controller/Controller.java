@@ -3,8 +3,14 @@ package controller;
 import gui.FormEvent;
 import model.*;
 
+import java.util.List;
+
 public class Controller {
     Database db = new Database();
+
+    public List<Person> getPeople() {
+        return db.getPeople();
+    }
 
     public void addPerson(FormEvent ev) {
         String name = ev.getName();
