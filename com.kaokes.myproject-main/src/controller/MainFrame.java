@@ -4,6 +4,8 @@ import model.AgeCategory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
 
@@ -40,7 +42,7 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    private JMenuBar createMenuBar(){
+    private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
@@ -62,10 +64,16 @@ public class MainFrame extends JFrame {
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
 
-        showFormItem.addActionListener(e-> {
-            JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem)e.getSource();
+        showFormItem.addActionListener(e -> {
+            JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
             formPanel.setVisible(menuItem.isSelected());
         });
+
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        exitItem.setMnemonic(KeyEvent.VK_X);
+        exitItem.addActionListener(e -> System.exit(0));
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+
         return menuBar;
     }
 }

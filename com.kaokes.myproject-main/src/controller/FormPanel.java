@@ -7,13 +7,14 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class FormPanel extends JPanel {
     private final JLabel nameLabel;
     private final JLabel occupationLabel;
     private final JTextField nameField;
     private final JTextField occupationField;
-    private final JButton submitBtn;
+    private final JButton okBtn;
     private final JList<AgeCategory> ageList;
     private final JComboBox<String> empCombo;
     private final JCheckBox citizenCheck;
@@ -75,8 +76,8 @@ public class FormPanel extends JPanel {
         empModel.addElement("unemployed");
         empCombo.setModel(empModel);
 
-        submitBtn = new JButton("Submit");
-        submitBtn.addActionListener(e -> {
+        okBtn = new JButton("OK");
+        okBtn.addActionListener(e -> {
             String gender = genderGroup.getSelection().getActionCommand();
 
             FormEvent formEvent = new FormEvent(this,
@@ -91,6 +92,11 @@ public class FormPanel extends JPanel {
                 formListener.formEventOccurred(formEvent);
             }
         });
+
+        okBtn.setMnemonic(KeyEvent.VK_O);
+        nameLabel.setDisplayedMnemonic(KeyEvent.VK_N);
+        nameLabel.setLabelFor(nameField);
+
         layoutComponents();
     }
 
@@ -212,6 +218,6 @@ public class FormPanel extends JPanel {
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.CENTER;
         gc.weighty = 5;
-        add(submitBtn, gc);
+        add(okBtn, gc);
     }
 }
