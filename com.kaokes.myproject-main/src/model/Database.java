@@ -1,19 +1,20 @@
 package model;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
-    private List<Person> people = new ArrayList<>();
+    private List<Person> people = new LinkedList<>();
 
     public void addPerson(Person person) {
         people.add(person);
     }
 
     public List<Person> getPeople() {
-        return people;
+        return Collections.unmodifiableList(people);
     }
 
     public void saveToFile(File file) throws IOException {
@@ -39,5 +40,9 @@ public class Database {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void removePerson(int index) {
+        people.remove(index);
     }
 }

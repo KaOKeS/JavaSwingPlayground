@@ -26,6 +26,8 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         tablePanel.setData(controller.getPeople());
 
+        tablePanel.addPersonTableListener(controller::removePerson);
+
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new PersonFileFilter());
 

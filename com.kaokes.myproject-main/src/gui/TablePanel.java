@@ -12,6 +12,7 @@ public class TablePanel extends JPanel {
     private final JTable table;
     private final PersonTableModel tableModel;
     private JPopupMenu popup;
+    private transient PersonTableListener personTableListener;
 
     public TablePanel() {
         this.tableModel = new PersonTableModel();
@@ -24,9 +25,19 @@ public class TablePanel extends JPanel {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(e.getButton()==MouseEvent.BUTTON3){
-                    popup.show(table,e.getX(),e.getY());
+                int row = table.rowAtPoint(e.getPoint());
+                table.getSelectionModel().setSelectionInterval(row, row);
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    popup.show(table, e.getX(), e.getY());
                 }
+            }
+        });
+
+        removeItem.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (personTableListener != null) {
+                personTableListener.rowDeleted(row);
+                tableModel.fireTableRowsDeleted(row, row);
             }
         });
 
@@ -40,5 +51,9 @@ public class TablePanel extends JPanel {
 
     public void refresh() {
         tableModel.fireTableDataChanged();
+    }
+
+    public void addPersonTableListener(PersonTableListener listener) {
+        this.personTableListener = listener;
     }
 }
