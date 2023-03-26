@@ -1,6 +1,4 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
 /out/
-/.idea/sonarlint/
-/.idea/inspectionProfiles/Project_Default.xml
+/.idea/
