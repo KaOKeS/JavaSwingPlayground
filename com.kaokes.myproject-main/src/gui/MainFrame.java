@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 public class MainFrame extends JFrame {
 
@@ -17,6 +18,7 @@ public class MainFrame extends JFrame {
     private final transient Controller controller;
     private final TablePanel tablePanel;
     private final PrefsDialog prefsDialog;
+    private final Preferences prefs;
 
     public MainFrame(String title) {
         super(title);
@@ -26,9 +28,21 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablePanel = new TablePanel();
         prefsDialog = new PrefsDialog(this);
+
+        prefs = Preferences.userRoot().node("db");
         tablePanel.setData(controller.getPeople());
 
         tablePanel.addPersonTableListener(controller::removePerson);
+        prefsDialog.setPrefsListener((user, password, port) -> {
+            prefs.put("user", user);
+            prefs.put("password", password);
+            prefs.put("port", String.valueOf(port));
+        });
+        String user = prefs.get("user", "");
+        String password = prefs.get("password", "");
+        int port = prefs.getInt("port", 3306);
+
+        prefsDialog.setDefaults(user, password, port);
 
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new PersonFileFilter());
@@ -75,7 +89,7 @@ public class MainFrame extends JFrame {
         windowMenu.add(showMenu);
         windowMenu.add(prefsItem);
 
-        prefsItem.addActionListener( e -> prefsDialog.setVisible(true));
+        prefsItem.addActionListener(e -> prefsDialog.setVisible(true));
 
         menuBar.add(fileMenu);
         menuBar.add(windowMenu);
