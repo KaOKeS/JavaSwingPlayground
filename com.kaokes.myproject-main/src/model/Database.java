@@ -1,13 +1,38 @@
 package model;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Database {
-    private List<Person> people = new LinkedList<>();
+    private final List<Person> people = new LinkedList<>();
+    private Connection con;
+
+    public void connect() {
+        if (con != null) {
+            return;
+        }
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/swingtest", "root", "admin");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void disconnect() {
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void addPerson(Person person) {
         people.add(person);
