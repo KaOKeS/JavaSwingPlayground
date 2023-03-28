@@ -33,4 +33,10 @@ public class Person implements Serializable {
         this.usCitizen = usCitizen;
         this.gender = gender;
     }
+
+    public Person(Long id, String name, String occupation, AgeCategory ageCategory, EmploymentCategory empCat, String taxId, boolean usCitizen, Gender gender) {
+        this(name, occupation, ageCategory, empCat, taxId, usCitizen, gender);
+        this.setId(id);
+        count++;
+    }
 }

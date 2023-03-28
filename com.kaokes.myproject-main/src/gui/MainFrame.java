@@ -7,11 +7,11 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.prefs.Preferences;
 
 public class MainFrame extends JFrame {
 
-    private final TextPanel textPanel;
     private final Toolbar toolbar;
     private final FormPanel formPanel;
     private final JFileChooser fileChooser;
@@ -22,7 +22,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame(String title) {
         super(title);
-        textPanel = new TextPanel();
         toolbar = new Toolbar();
         formPanel = new FormPanel();
         controller = new Controller();
@@ -59,13 +58,45 @@ public class MainFrame extends JFrame {
         add(tablePanel, BorderLayout.CENTER);
         add(formPanel, BorderLayout.WEST);
 
-        toolbar.setTextListener(textPanel::appendText);
+        toolbar.setToolbarListener(new ToolbarListener() {
+            @Override
+            public void saveEventOccured() {
+                connect();
+                try {
+                    controller.save();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Unable to save to database.","Database save problem",JOptionPane.ERROR_MESSAGE);
+                }
+                finally {
+                    controller.disconnect();
+                }
+            }
+
+            @Override
+            public void refreshEventOccured() {
+                connect();
+                try {
+                    controller.load();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(MainFrame.this,"Unable to load from database.","Database load problem",JOptionPane.ERROR_MESSAGE);
+                }
+                tablePanel.refresh();
+            }
+        });
         formPanel.setFormListener(e -> {
             controller.addPerson(e);
             tablePanel.refresh();
         });
 
         setVisible(true);
+    }
+
+    private void connect(){
+        try {
+            controller.connect();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(MainFrame.this,"Cannot connect to database.","Database connection problem",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JMenuBar createMenuBar() {
