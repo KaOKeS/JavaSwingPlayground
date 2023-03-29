@@ -4,8 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.prefs.Preferences;
@@ -48,8 +47,18 @@ public class MainFrame extends JFrame {
 
         setJMenuBar(createMenuBar());
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Window closing...");
+                controller.disconnect();
+                dispose();
+                //swing bug elimination
+                System.gc();
+            }
+        });
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setSize(500, 500);
         setMinimumSize(new Dimension(500, 500));
         setLayout(new BorderLayout());
@@ -66,9 +75,6 @@ public class MainFrame extends JFrame {
                     controller.save();
                 } catch (SQLException e) {
                     JOptionPane.showMessageDialog(MainFrame.this,"Unable to save to database.","Database save problem",JOptionPane.ERROR_MESSAGE);
-                }
-                finally {
-                    controller.disconnect();
                 }
             }
 
@@ -135,7 +141,10 @@ public class MainFrame extends JFrame {
         exitItem.addActionListener(e -> {
             int action = JOptionPane.showConfirmDialog(MainFrame.this, "Do you really want to exit application?", "Confirm Exit", JOptionPane.OK_CANCEL_OPTION);
             if (action == JOptionPane.OK_OPTION) {
-                System.exit(0);
+                WindowListener[] windowListeners = getWindowListeners();
+                for(WindowListener listener:windowListeners){
+                    listener.windowClosing(new WindowEvent(MainFrame.this,0));
+                }
             }
         });
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
