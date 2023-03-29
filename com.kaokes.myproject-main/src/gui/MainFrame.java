@@ -18,6 +18,9 @@ public class MainFrame extends JFrame {
     private final TablePanel tablePanel;
     private final PrefsDialog prefsDialog;
     private final Preferences prefs;
+    private final JSplitPane splitPane;
+    private final JTabbedPane tabbedPane;
+    private final MessagePanel messagePanel;
 
     public MainFrame(String title) {
         super(title);
@@ -26,6 +29,12 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         tablePanel = new TablePanel();
         prefsDialog = new PrefsDialog(this);
+        tabbedPane = new JTabbedPane();
+        messagePanel = new MessagePanel();
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tabbedPane);
+
+        tabbedPane.addTab("Person Database",tablePanel);
+        tabbedPane.addTab("Messages",messagePanel);
 
         prefs = Preferences.userRoot().node("db");
         tablePanel.setData(controller.getPeople());
@@ -63,9 +72,8 @@ public class MainFrame extends JFrame {
         setMinimumSize(new Dimension(500, 500));
         setLayout(new BorderLayout());
 
-        add(toolbar, BorderLayout.NORTH);
-        add(tablePanel, BorderLayout.CENTER);
-        add(formPanel, BorderLayout.WEST);
+        add(toolbar, BorderLayout.PAGE_START);
+        add(splitPane, BorderLayout.CENTER);
 
         toolbar.setToolbarListener(new ToolbarListener() {
             @Override
@@ -74,7 +82,7 @@ public class MainFrame extends JFrame {
                 try {
                     controller.save();
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Unable to save to database.","Database save problem",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.this, "Unable to save to database.", "Database save problem", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
@@ -84,7 +92,7 @@ public class MainFrame extends JFrame {
                 try {
                     controller.load();
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(MainFrame.this,"Unable to load from database.","Database load problem",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainFrame.this, "Unable to load from database.", "Database load problem", JOptionPane.ERROR_MESSAGE);
                 }
                 tablePanel.refresh();
             }
@@ -97,11 +105,11 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    private void connect(){
+    private void connect() {
         try {
             controller.connect();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(MainFrame.this,"Cannot connect to database.","Database connection problem",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.this, "Cannot connect to database.", "Database connection problem", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -133,6 +141,9 @@ public class MainFrame extends JFrame {
 
         showFormItem.addActionListener(e -> {
             JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
+            if (menuItem.isSelected()) {
+                splitPane.setDividerLocation((int) formPanel.getMinimumSize().getWidth());
+            }
             formPanel.setVisible(menuItem.isSelected());
         });
 
@@ -142,8 +153,8 @@ public class MainFrame extends JFrame {
             int action = JOptionPane.showConfirmDialog(MainFrame.this, "Do you really want to exit application?", "Confirm Exit", JOptionPane.OK_CANCEL_OPTION);
             if (action == JOptionPane.OK_OPTION) {
                 WindowListener[] windowListeners = getWindowListeners();
-                for(WindowListener listener:windowListeners){
-                    listener.windowClosing(new WindowEvent(MainFrame.this,0));
+                for (WindowListener listener : windowListeners) {
+                    listener.windowClosing(new WindowEvent(MainFrame.this, 0));
                 }
             }
         });
