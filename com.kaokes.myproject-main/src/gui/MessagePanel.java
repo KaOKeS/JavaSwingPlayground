@@ -1,29 +1,12 @@
 package gui;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
-
-@AllArgsConstructor
-class ServerInfo {
-    private String name;
-    @Getter
-    private Long id;
-    @Setter
-    @Getter
-    private boolean checked;
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
 
 public class MessagePanel extends JPanel {
     private final JTree serverTree = new JTree(createTree());
@@ -36,12 +19,15 @@ public class MessagePanel extends JPanel {
         serverTree.setEditable(true);
         serverTree.setCellEditor(treeCellEditor);
 
-        serverTree.addTreeSelectionListener(e -> {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) serverTree.getLastSelectedPathComponent();
-            Object userObject = node.getUserObject();
-            if (userObject instanceof ServerInfo serverInfo) {
-                Long id = serverInfo.getId();
+        treeCellEditor.addCellEditorListener(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent e) {
+                ServerInfo serverInfo = (ServerInfo) treeCellEditor.getCellEditorValue();
+                System.out.println(serverInfo.getId().toString() + serverInfo.isChecked());
             }
+
+            @Override
+            public void editingCanceled(ChangeEvent e) {}
         });
 
         setLayout(new BorderLayout());
