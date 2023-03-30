@@ -10,8 +10,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 
 public class MessagePanel extends JPanel {
     private final JTree serverTree;
@@ -43,11 +46,8 @@ public class MessagePanel extends JPanel {
                     selectedServers.remove(serverId);
                 }
                 messageServer.setSelectedServers(selectedServers);
-                System.out.println("Messages waiting: " + messageServer.getMessageCount());
 
-                for(Message message : messageServer){
-                    System.out.println(message.getTitle());
-                }
+                retriveMessages();
             }
 
             @Override
@@ -57,6 +57,43 @@ public class MessagePanel extends JPanel {
 
         setLayout(new BorderLayout());
         add(new JScrollPane(serverTree), BorderLayout.CENTER);
+    }
+
+    private void retriveMessages() {
+        System.out.println("Messages waiting: " + messageServer.getMessageCount());
+        SwingWorker<List<Message>,Integer> worker = new SwingWorker<>() {
+            @Override
+            protected List<Message> doInBackground() {
+                List<Message> retrievedMessages = new ArrayList<>();
+                int count = 0;
+                for(Message message : messageServer){
+                    retrievedMessages.add(message);
+                    System.out.println(message.getTitle());
+                    count++;
+                    publish(count);
+                }
+                return retrievedMessages;
+            }
+
+            @Override
+            protected void process(java.util.List<Integer> counts) {
+                int retrived = counts.get(counts.size()-1);
+                System.out.println("Got " + retrived + " messages.");
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<Message> retrievedMessages = get();
+                    System.out.println("Retrived " + retrievedMessages.size() + " messages.");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        worker.execute();
     }
 
     private DefaultMutableTreeNode createTree() {
