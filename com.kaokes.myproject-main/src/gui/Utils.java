@@ -19,7 +19,7 @@ public class Utils {
     public static ImageIcon createIcon(String path) {
         URL url = Utils.class.getResource(path);
         if (url == null) {
-            throw new NullPointerException("Unable to load image: " + url);
+            throw new NullPointerException("Unable to load image: " + path);
         }
         return new ImageIcon(url);
     }

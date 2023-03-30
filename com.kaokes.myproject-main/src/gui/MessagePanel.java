@@ -1,21 +1,23 @@
 package gui;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
 @AllArgsConstructor
 class ServerInfo {
     private String name;
+    @Getter
     private Long id;
-
-    public Long getId() {
-        return id;
-    }
+    @Setter
+    @Getter
+    private boolean checked;
 
     @Override
     public String toString() {
@@ -25,15 +27,14 @@ class ServerInfo {
 
 public class MessagePanel extends JPanel {
     private final JTree serverTree = new JTree(createTree());
-    private final DefaultTreeCellRenderer treeCellRenderer = new DefaultTreeCellRenderer();
+    private final TreeCellRenderer treeCellRenderer = new ServerTreeCellRenderer();
+    private final ServerTreeCellEditor treeCellEditor = new ServerTreeCellEditor();
 
     public MessagePanel() {
-        treeCellRenderer.setLeafIcon(Utils.createIcon("/images/icons8-server-16.png"));
-        treeCellRenderer.setOpenIcon(Utils.createIcon("/images/icons8-internet-folder-16.png"));
-        treeCellRenderer.setClosedIcon(Utils.createIcon("/images/icons8-internet-folder-16.png"));
-
         serverTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         serverTree.setCellRenderer(treeCellRenderer);
+        serverTree.setEditable(true);
+        serverTree.setCellEditor(treeCellEditor);
 
         serverTree.addTreeSelectionListener(e -> {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) serverTree.getLastSelectedPathComponent();
@@ -51,13 +52,13 @@ public class MessagePanel extends JPanel {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Servers");
 
         DefaultMutableTreeNode branch1 = new DefaultMutableTreeNode("USA");
-        DefaultMutableTreeNode server1 = new DefaultMutableTreeNode(new ServerInfo("New York", 0L));
-        DefaultMutableTreeNode server2 = new DefaultMutableTreeNode(new ServerInfo("Boston", 1L));
-        DefaultMutableTreeNode server3 = new DefaultMutableTreeNode(new ServerInfo("Los Angeles", 2L));
+        DefaultMutableTreeNode server1 = new DefaultMutableTreeNode(new ServerInfo("New York", 0L, true));
+        DefaultMutableTreeNode server2 = new DefaultMutableTreeNode(new ServerInfo("Boston", 1L, false));
+        DefaultMutableTreeNode server3 = new DefaultMutableTreeNode(new ServerInfo("Los Angeles", 2L, true));
 
         DefaultMutableTreeNode branch2 = new DefaultMutableTreeNode("UK");
-        DefaultMutableTreeNode server4 = new DefaultMutableTreeNode(new ServerInfo("London", 3L));
-        DefaultMutableTreeNode server5 = new DefaultMutableTreeNode(new ServerInfo("Edinburgh", 4L));
+        DefaultMutableTreeNode server4 = new DefaultMutableTreeNode(new ServerInfo("London", 3L, false));
+        DefaultMutableTreeNode server5 = new DefaultMutableTreeNode(new ServerInfo("Edinburgh", 4L, true));
 
         branch1.add(server1);
         branch1.add(server2);

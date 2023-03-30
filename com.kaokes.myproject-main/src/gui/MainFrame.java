@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
         tabbedPane = new JTabbedPane();
         messagePanel = new MessagePanel();
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tabbedPane);
+        splitPane.setOneTouchExpandable(true);
 
         tabbedPane.addTab("Person Database",tablePanel);
         tabbedPane.addTab("Messages",messagePanel);
